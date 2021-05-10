@@ -107,6 +107,8 @@ class ListViewController: UITableViewController {
                 mvo.detail = r["linkUel"] as? String
                 mvo.rating = ((r["ratingAverage"] as! NSString).doubleValue)
                 
+                mvo.thumbnailImage = UIImage(data: try! Data(contentsOf: URL(string: mvo.thumbnail!)!))
+                
                 self.list.append(mvo)
                 
                 let totalCount = (hoppin["totalCount"] as? NSString)!.integerValue
@@ -155,8 +157,8 @@ class ListViewController: UITableViewController {
         //thumbnail 이미지 생성
 //        cell2.thumbnail.image = UIImage(named: row.thumbnail!) // 메모리에 캐싱
 //        cell2.thumbnail.image = UIImage(contentsOfFile: row.thumbnail!) //그때그때 읽어옴.
-        cell2.thumbnail.image = UIImage(data: try! Data(contentsOf: URL(string: row.thumbnail!)!))
-        
+//        cell2.thumbnail.image = UIImage(data: try! Data(contentsOf: URL(string: row.thumbnail!)!))
+        cell2.thumbnail.image = row.thumbnailImage
         return cell2
     }
 //    override func viewWillAppear(_ animated: Bool) {
