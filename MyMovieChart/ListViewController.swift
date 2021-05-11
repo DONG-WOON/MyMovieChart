@@ -104,7 +104,7 @@ class ListViewController: UITableViewController {
                 mvo.title = r["title"] as? String
                 mvo.description = r["genreNames"] as? String
                 mvo.thumbnail = r["thumbnailImage"] as? String
-                mvo.detail = r["linkUel"] as? String
+                mvo.detail = r["linkUrl"] as? String
                 mvo.rating = ((r["ratingAverage"] as! NSString).doubleValue)
                 
                 mvo.thumbnailImage = UIImage(data: try! Data(contentsOf: URL(string: mvo.thumbnail!)!))
@@ -185,4 +185,22 @@ class ListViewController: UITableViewController {
 //        self.tableView.estimatedRowHeight = 50
 //    }
     
+}
+//MARK: -화면 전환시 값을 넘겨주기위한 세그웨이 관련 처리
+extension ListViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segue_detail" {
+            // sender 인자를 캐스팅하여 테이블셀 객체로 변환
+            let cell = sender as! MovieCell
+            
+            // 사용자가 클릭한 행을 찾아낸다
+            let path = self.tableView.indexPath(for: cell)
+            print(path as Any)
+            // 선택한 셀의 영화 데이터를 가져온다음, 목적지 뷰 컨트롤러의 mvo변수에 대입
+            let detailVC = segue.destination as? DetailViewController
+            
+            //API 영화 데이터 배열 중에서 선택된 행에 대한 데이터 추출
+            detailVC?.mvo = self.list[path!.row]
+        }
+    }
 }
