@@ -121,6 +121,21 @@ class ListViewController: UITableViewController {
             NSLog("Parsing Error!")
         }
     }
+    //
+    func getThumbnailImage(_ index: Int) -> UIImage {
+        //인자값으로 받은 인덱스를 기반으로 해당하는 배열 데이터를 읽어옴.
+        let mvo = self.list[index]
+        
+        //메모이제이션 : 저장된 이미지가 있으면 그것을 반환하고 없으면 내려받아 저장한 후 리턴
+        if let savedImage = mvo.thumbnailImage {
+            return savedImage
+        }else {
+            mvo.thumbnailImage = UIImage(data: try! Data(contentsOf: URL(string: mvo.thumbnail!)!))
+            
+            return mvo.thumbnailImage!
+        }
+        
+    }
     
     override func viewDidLoad() {
         self.callMovieAPI()
@@ -158,7 +173,11 @@ class ListViewController: UITableViewController {
 //        cell2.thumbnail.image = UIImage(named: row.thumbnail!) // 메모리에 캐싱
 //        cell2.thumbnail.image = UIImage(contentsOfFile: row.thumbnail!) //그때그때 읽어옴.
 //        cell2.thumbnail.image = UIImage(data: try! Data(contentsOf: URL(string: row.thumbnail!)!))
-        cell2.thumbnail.image = row.thumbnailImage
+//        cell2.thumbnail.image = row.thumbnailImage
+        DispatchQueue.main.async(execute: {
+            cell2.thumbnail.image = self.getThumbnailImage(indexPath.row)
+        })
+        
         return cell2
     }
 //    override func viewWillAppear(_ animated: Bool) {
