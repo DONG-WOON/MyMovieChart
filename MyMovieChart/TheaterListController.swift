@@ -65,5 +65,14 @@ class TheaterListController: UITableViewController {
         cell.address.text = obj["소재지도로명주소"] as? String
         return cell
     }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segue_map" {
+            let path = self.tableView.indexPath(for: sender as! UITableViewCell)
+            
+            let data = self.list[path!.row]
+            
+            (segue.destination as? TheaterViewController)?.param = data
+        }
+    }
 }
 
